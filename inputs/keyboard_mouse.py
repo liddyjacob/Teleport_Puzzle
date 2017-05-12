@@ -48,19 +48,19 @@ class Keyboard_Mouse:
 		self.right_key = key
 
 	#is the key tapped?
-	def tapped(self, key_str):
+	def istapped(self, key_str):
 		key_int = self.getKeyNo(key_str)
 		#Handle bad string:
 		if (key_int == -1):
 			return
-		return tapped[key_str][1];
+		return self.tapped[key_int][1];
 
-	def pressed(self, key_str):
+	def ispressed(self, key_str):
 		key_int = self.getKeyNo(key_str)
 		#Handle bad string:
 		if (key_int == -1):
 			return
-		return pressed[key_str][1];
+		return self.pressed[key_int][1];
 
 	#Update the keyboard:
 	def update():
