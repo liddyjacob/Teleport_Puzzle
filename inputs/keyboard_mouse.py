@@ -35,7 +35,8 @@ class Keyboard_Mouse:
 			return RIGHT
 		if (string == "SHOOT"):
 			return SHOOT
-		if (string )
+		if (string == "MENU"):
+			return MENU
 		print("Error in _getKeyNo: Invalid Key.")
 		return -1
 

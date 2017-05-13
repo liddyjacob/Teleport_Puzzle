@@ -1,23 +1,63 @@
 #gamestate.h
 import sys
 import os
+
 sys.path.append(os.path.abspath("../inputs"))
 from keyboard_mouse import *
+
+sys.path.append(os.path.abspath("../player"))
+from player import *
+
+sys.path.append(os.path.abspath("../map"))
+from gamemap import *
+
+sys.path.append(os.path.abspath("../objects"))
+from objects import *
+
+EXIT = 0
+RETURN = 1
+KEEPOPEN = 3
 
 class Gamestate:
 	def __init__(self, inputs):
 		self._inputs = inputs;
 		self.ingame = False
+		self.menuopen = False
 
 
 	def change_state(self):
 		self.ingame = not self.ingame;
+
+	def set_level(self, gamemap):
 		if self.ingame == True:
+			self.gamemap = Gamemap(gamemap)
 			self.player = Player
-			self.gamemap = Gamemap
-			self.objects = []
+			self.objects = Object_Set(self.gamemap)
 			self.debug = False
+
+	def open_menu(self):
+		self.menuopen = True
+		if (self.ingame):
+			print("Open Menu -- ingame")
+		else:
+			print("Open Menu -- Out of game")
+
+	def deal_menu(self):
+		#if condtioions are right, close menu.
+		#Determine how
+		return RETURN
 
 	def update(self):
 		self._inputs.update()
-		if _inputs.mouse
+		#what to do in the game:
+		if (self.ingame):
+			if self._inputs.ispressed("MENU"):
+				self.open_menu()
+			if (self.deal_menu == EXIT):
+				self.menuopen = False
+
+			#Update player:
+			player.update(self._inputs, self.gamemap)
+			#Update map:
+			objects.update(self.player, self.gamemap)
+			#update
