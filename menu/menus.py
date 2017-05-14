@@ -3,10 +3,17 @@
 import sys
 import os
 
-sys.path.append(os.path.abspath("../inputs"))
-from keyboard_mouse import *
-
 import pygame
+
+#print sys.path
+sys.path.append(os.path.abspath("../inputs"))
+from inputs import keyboard_mouse
+print keyboard_mouse
+
+sys.path.append(os.path.abspath("../drawutils"))
+from drawutils import *
+
+
 
 X_START = 50
 Y_START = 50
@@ -24,7 +31,7 @@ class MenuItem:
 
 	 
 	def set_height(self, pixel_height = 20):	
-		self.height = pixel_heigth
+		self.height = pixel_height
 
 	def set_length(self, pixel_length = 70):
 		self.length = pixel_length
@@ -36,7 +43,7 @@ class MenuItem:
 
 	#Index number
 	def dynamic_location(self, item_number, indent_number = 0):
-		self.x = X_START + X_DIFF * indend_number
+		self.x = X_START + X_DIFF * indent_number
 		self.Y = Y_START + Y_DIFF * item_number
 
 	#See if mouse is in range:
@@ -70,6 +77,7 @@ class MenuItem:
 class Main_Menu:
 	#Set up a main menu:
 	def __init__(self):
+		self.input = Keyboard_Mouse()
 		self.start = MenuItem("START")
 		self.exit = MenuItem("EXIT")
 
@@ -77,8 +85,8 @@ class Main_Menu:
 		self.exit.dynamic_location(1)
 
 	def update(self):
-		self.start.update()
-		self.exit.update()
+		self.start.update(self.input)
+		self.exit.update(self.input)
 
 	def get_state(self):
 		if start.get_state() == "PRESSED":

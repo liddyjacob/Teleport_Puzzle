@@ -1,11 +1,44 @@
 #Main.py
 #Python - Main game
+import sys
+import os
+
 import pygame
 from pygame.locals import *
 
+
+sys.path.append(os.path.abspath("menu/"))
+sys.path.append(os.path.abspath("inputs/"))
+from menus import *
+
+
+
+
+def main():
+
+	pygame.init()
+	screen = pygame.display.set_mode((700, 500))
+	pygame.display.set_caption('Basic Pygame program')
+
+	menu = Main_Menu()
+	pygame.display.flip()
+
+	while 1:
+		for event in pygame.event.get():
+			if event.type == QUIT:
+				return
+			else:
+				menu.update()
+
+#        screen.blit(background, (0, 0))
+		pygame.display.flip()
+
+
+if __name__ == '__main__': main()
+
 print "hi"
 
-
+"""
 def main():
     # Initialise screen
     pygame.init()
@@ -39,3 +72,4 @@ def main():
 
 
 if __name__ == '__main__': main()
+"""
