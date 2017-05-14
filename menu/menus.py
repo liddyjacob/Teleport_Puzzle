@@ -1,5 +1,7 @@
 #menus.py
 #Contains both menu classes
+import sys
+import os
 
 sys.path.append(os.path.abspath("../inputs"))
 from keyboard_mouse import *
@@ -39,16 +41,52 @@ class MenuItem:
 
 	#See if mouse is in range:
 	def inrange(self, coords):
-
+		if (self.x <= coords[0]) and (self.x + self.length >= coords[0]):
+			if (self.y <= coords[1]) and (self.y + self.heigth >= coords[1]):
+				return True
+		return False
 
 	def update(self, input_):
 		mouse_pos = pygame.mouse.get_rel()
-		if 
-		input_.ispressed
+		if self.inrange(mouse_pos):
+			if (input_.ispressed("SHOOT")):
+				self.pressed = True
+				self.hover = True
+			else:
+				self.pressed = False
+				self.hover = True
+		else:
+			self.pressed = False
+			self.hover = False
 
+	def get_state(self):
+		if (self.pressed):
+			return "PRESSED"
+		if (self.hover):
+			return "HOVER"
+		return "NORMAL"
 
 
 class Main_Menu:
 	#Set up a main menu:
 	def __init__(self):
-		self.menu
+		self.start = MenuItem("START")
+		self.exit = MenuItem("EXIT")
+
+		self.start.dynamic_location(0)
+		self.exit.dynamic_location(1)
+
+	def update(self):
+		self.start.update()
+		self.exit.update()
+
+	def get_state(self):
+		if start.get_state() == "PRESSED":
+			return "START"
+		if exit.get_state() == "PRESSED":
+			return "EXIT"
+		#Else
+		return "NORMAL"
+
+	
+			
