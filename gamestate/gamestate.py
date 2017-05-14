@@ -38,8 +38,11 @@ class Gamestate:
 	def open_menu(self):
 		self.menuopen = True
 		if (self.ingame):
+			#Set up main menu:
+			self.menu = Main_Menu
 			print("Open Menu -- ingame")
 		else:
+			self.menu = Ingame_Menu
 			print("Open Menu -- Out of game")
 
 	def deal_menu(self):
@@ -57,7 +60,14 @@ class Gamestate:
 				self.menuopen = False
 
 			#Update player:
-			player.update(self._inputs, self.gamemap)
+			self.player.update(self._inputs, self.gamemap, self.objects)
 			#Update map:
-			objects.update(self.player, self.gamemap)
-			#update
+			self.objects.update(self.player, self.gamemap)
+			#Update drawing
+			self.draw_ingame()
+
+		else:
+			self.draw_outgame()
+
+	def draw_outgame(self):
+		self.mainmenu
