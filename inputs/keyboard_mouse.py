@@ -11,7 +11,7 @@ MAXKEY = 6
 
 class Keyboard_Mouse:
 	def __init__(self):
-		self.key = [pygame.K_SPACE, pygame.K_s, pygame.K_a, pygame.K_d, pygame.MOUSEBUTTONDOWN, pygame.K_ESC]
+		self.key = [pygame.K_SPACE, pygame.K_s, pygame.K_a, pygame.K_d, pygame.MOUSEBUTTONDOWN, pygame.K_ESCAPE]
 		self.key[JUMP]  = pygame.K_SPACE
 		self.key[DUCK] = pygame.K_s
 		self.key[LEFT]  = pygame.K_a

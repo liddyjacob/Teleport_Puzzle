@@ -7,10 +7,13 @@ import pygame
 from pygame.locals import *
 
 
-sys.path.append(os.path.abspath("menu/"))
 sys.path.append(os.path.abspath("inputs/"))
+
+sys.path.append(os.path.abspath("menu/"))
 from menus import *
 
+sys.path.append(os.path.abspath("./drawutils/"))
+from drawutils import *
 
 
 
@@ -20,6 +23,7 @@ def main():
 	screen = pygame.display.set_mode((700, 500))
 	pygame.display.set_caption('Basic Pygame program')
 
+#	drawutils = Drawutils()
 	menu = Main_Menu()
 	pygame.display.flip()
 

@@ -7,8 +7,7 @@ import pygame
 
 #print sys.path
 sys.path.append(os.path.abspath("../inputs"))
-from inputs import keyboard_mouse
-print keyboard_mouse
+from keyboard_mouse import *
 
 sys.path.append(os.path.abspath("../drawutils"))
 from drawutils import *
