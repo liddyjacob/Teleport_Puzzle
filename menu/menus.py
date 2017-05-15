@@ -87,6 +87,37 @@ class MenuItem:
 			return "HOVER"
 		return "NORMAL"
 
+#TODO: This is just a copy of Main_menu(): Fix
+class Ingame_Menu:
+	def __init__(self):
+		self.input = Keyboard_Mouse()
+		self.start = MenuItem("RETURN")
+		self.exit = MenuItem("MAIN_MENU")
+
+		self.start.dynamic_location(0)
+		self.exit.dynamic_location(1)
+
+
+	def update(self):
+		self.input.update()
+		self.start.update(self.input)
+		self.exit.update(self.input)
+
+	def get_state(self):
+		if self.start.get_state() == "PRESSED":
+			return "START"
+		if self.exit.get_state() == "PRESSED":
+			return "EXIT"
+		#Else
+		return "NORMAL"
+
+
+	def draw(self, drawutils, screen):
+		self.input.update()
+		self.start.draw(drawutils, screen)
+		self.exit.draw(drawutils, screen)	
+		
+
 
 class Main_Menu:
 	#Set up a main menu:

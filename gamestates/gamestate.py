@@ -14,6 +14,9 @@ from gamemap import *
 sys.path.append(os.path.abspath("../objects"))
 from objects import *
 
+sys.path.append(os.path.abspath("../menu"))
+from menus import *
+
 EXIT = 0
 RETURN = 1
 KEEPOPEN = 3
@@ -22,10 +25,12 @@ class Gamestate:
 	def __init__(self, inputs):
 		self._inputs = inputs;
 		self.ingame = False
-		self.menuopen = False
+		self.menuopen = True
+		self.open_menu()
 
 
 	def change_state(self):
+		print ("Change State")
 		self.ingame = not self.ingame;
 
 	def set_level(self, gamemap):
@@ -38,36 +43,53 @@ class Gamestate:
 	def open_menu(self):
 		self.menuopen = True
 		if (self.ingame):
-			#Set up main menu:
-			self.menu = Main_Menu
-			print("Open Menu -- ingame")
-		else:
-			self.menu = Ingame_Menu
+			self.menu = Ingame_Menu()
 			print("Open Menu -- Out of game")
+		else:
+			#Set up main menu:
+			self.menu = Main_Menu()
+			print("Open Menu -- ingame")
 
-	def deal_menu(self):
+	def menu_state(self):
 		#if condtioions are right, close menu.
 		#Determine how
-		return RETURN
+		return self.menu.get_state()
+		
+
+		#Potential errors in update so WATCHOUT
 
 	def update(self):
 		self._inputs.update()
 		#what to do in the game:
-		if (self.ingame):
+		if self.ingame:
+			if self.menuopen == True:
+				self.menu.update()
+				if (self.menu_state == "EXIT"):
+					self.change_state()
+					self.menuopen = False
+
+		
 			if self._inputs.ispressed("MENU"):
 				self.open_menu()
-			if (self.deal_menu == EXIT):
-				self.menuopen = False
-
 			#Update player:
 			self.player.update(self._inputs, self.gamemap, self.objects)
 			#Update map:
 			self.objects.update(self.player, self.gamemap)
 			#Update drawing
-			self.draw_ingame()
-
 		else:
-			self.draw_outgame()
+			self.menu.update()
+			if (self.menu_state() == "START"):
+				self.change_state()
+				self.menuopen = False
 
-	def draw_outgame(self):
-		self.mainmenu
+	def draw(self, drawutils, screen):
+		if self.ingame:
+			self.draw_ingame(drawutils, screen)
+		else:
+			self.draw_outgame(drawutils, screen)
+
+	def draw_ingame(self, drawutils, screen):
+		print "Ingame"	
+
+	def draw_outgame(self, drawutils, screen):
+		self.menu.draw(drawutils, screen)

@@ -10,11 +10,13 @@ sys.path.append(os.path.abspath("draw/"))
 from drawutils import Drawutils
 #hi = Drawutils()
 
+sys.path.append(os.path.abspath("map/"))
 sys.path.append(os.path.abspath("inputs/"))
-
 sys.path.append(os.path.abspath("menu/"))
 from menus import *
-
+from keyboard_mouse import *
+sys.path.append(os.path.abspath("gamestates/"))
+from gamestate import *
 
 
 def main():
@@ -23,8 +25,10 @@ def main():
 	screen = pygame.display.set_mode((700, 500))
 	pygame.display.set_caption('Basic Pygame program')
 
+	inputs = Keyboard_Mouse()
 	drawutils = Drawutils()
 	menu = Main_Menu()
+	gamestate = Gamestate(inputs)
 	pygame.display.flip()
 
 	while 1:
@@ -32,10 +36,15 @@ def main():
 			if event.type == QUIT:
 				return
 			else:
-				menu.update()
-				print menu.get_state()
-
-		menu.draw(drawutils, screen)
+				gamestate.update()
+				
+				if gamestate.menuopen == True:
+					state = gamestate.menu_state()
+					if state == "EXIT":
+						return
+					if state == "START":
+						print("Start")
+		gamestate.draw(drawutils, screen)
 		#if menu.get_state() == "START"
 #        screen.blit(background, (0, 0))
 		pygame.display.flip()
