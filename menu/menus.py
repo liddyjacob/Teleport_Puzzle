@@ -9,7 +9,7 @@ import pygame
 sys.path.append(os.path.abspath("../inputs"))
 from keyboard_mouse import *
 
-sys.path.append(os.path.abspath("../drawutils"))
+#sys.path.append(os.path.abspath("../drawutils"))
 from drawutils import *
 
 
@@ -43,17 +43,18 @@ class MenuItem:
 	#Index number
 	def dynamic_location(self, item_number, indent_number = 0):
 		self.x = X_START + X_DIFF * indent_number
-		self.Y = Y_START + Y_DIFF * item_number
+		self.y = Y_START + Y_DIFF * item_number
 
 	#See if mouse is in range:
 	def inrange(self, coords):
 		if (self.x <= coords[0]) and (self.x + self.length >= coords[0]):
-			if (self.y <= coords[1]) and (self.y + self.heigth >= coords[1]):
+			if (self.y <= coords[1]) and (self.y + self.height >= coords[1]):
 				return True
 		return False
 
 	def update(self, input_):
-		mouse_pos = pygame.mouse.get_rel()
+		mouse_pos = pygame.mouse.get_pos()
+		print mouse_pos
 		if self.inrange(mouse_pos):
 			if (input_.ispressed("SHOOT")):
 				self.pressed = True
@@ -64,6 +65,20 @@ class MenuItem:
 		else:
 			self.pressed = False
 			self.hover = False
+
+	def draw(self, drawUtils, screen):
+		if self.get_state() == "PRESSED":
+			boxcolor = pygame.Color(255,255,255,255)
+		if self.get_state() == "HOVER":
+			boxcolor = pygame.Color(255,100,50,10)
+		if self.get_state() == "NORMAL":
+			boxcolor = pygame.Color(15,50,100,10)
+
+		pygame.draw.rect(screen, boxcolor, [self.x, self.y, self.length, self.height])
+
+		screen.blit(drawUtils.font.render(self.text, True, (255,255,255)), (self.x, self.y))
+		pygame.display.update()
+
 
 	def get_state(self):
 		if (self.pressed):
@@ -84,16 +99,21 @@ class Main_Menu:
 		self.exit.dynamic_location(1)
 
 	def update(self):
+		self.input.update()
 		self.start.update(self.input)
 		self.exit.update(self.input)
 
 	def get_state(self):
-		if start.get_state() == "PRESSED":
+		if self.start.get_state() == "PRESSED":
 			return "START"
-		if exit.get_state() == "PRESSED":
+		if self.exit.get_state() == "PRESSED":
 			return "EXIT"
 		#Else
 		return "NORMAL"
 
-	
+
+	def draw(self, drawutils, screen):
+		self.input.update()
+		self.start.draw(drawutils, screen)
+		self.exit.draw(drawutils, screen)	
 			

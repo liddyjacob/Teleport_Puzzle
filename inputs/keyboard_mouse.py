@@ -1,5 +1,9 @@
 import pygame
 
+LEFT_M = 0
+MIDDLE_M = 1
+RIGHT_M = 2
+
 JUMP = 0
 DUCK = 1
 LEFT = 2
@@ -17,9 +21,9 @@ class Keyboard_Mouse:
 		self.key[LEFT]  = pygame.K_a
 		self.key[RIGHT] = pygame.K_d
 		self.mouse     = True
-		self.mouse_but = 1
+		self.mouse_but = LEFT_M
 		self.key[SHOOT]     = pygame.MOUSEBUTTONDOWN
-
+		self.key[MENU] = pygame.K_ESCAPE
 		self.tapped = [False] * MAXKEY
 		self.pressed = [False] * MAXKEY
 
@@ -67,13 +71,26 @@ class Keyboard_Mouse:
 			return
 		return self.pressed[key_int];
 
-	#Update the keyboard:
-	def update(self):
-		#Get all keys pressed:
-		keys=pygame.key.get_pressed()
+	def set_state(self, index, keys):
+		if index == SHOOT:
+			if self.mouse: 
+				if self.pressed[index] == False:
+					self.tapped[index]= self.pressed[index] = pygame.mouse.get_pressed()[self.mouse_but]
+				else:
+					self.tapped[index] = False
+					self.pressed[index] = self.pressed[index] = pygame.mouse.get_pressed()[self.mouse_but]
 
-		for index in range(JUMP, SHOOT + 1):
-			#If the key was not pressed:
+			else:
+				#If the key was not pressed:
+				if (self.pressed[index] == False):
+					#Press if pressed:
+					self.pressed[index] = keys[self.key[index]]
+					self.tapped[index] = keys[self.key[index]]
+				else:
+					#Obviously if it was already pressed it was not tapped: 
+					self.tapped[index] = False;
+					self.pressed[index] = keys[self.key[index]];
+		else:
 			if (self.pressed[index] == False):
 				#Press if pressed:
 				self.pressed[index] = keys[self.key[index]]
@@ -82,4 +99,14 @@ class Keyboard_Mouse:
 				#Obviously if it was already pressed it was not tapped: 
 				self.tapped[index] = False;
 				self.pressed[index] = keys[self.key[index]];
+
+
+	#Update the keyboard:
+	def update(self):
+		#Get all keys pressed:
+		keys=pygame.key.get_pressed()
+
+		for index in range(JUMP, MAXKEY):	
+			self.set_state(index, keys)
+		#Deal with mouse key separatly TODO
 		return

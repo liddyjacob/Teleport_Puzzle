@@ -15,7 +15,7 @@ while (1):
 	for event in pygame.event.get():
 		if (event.type == pygame.KEYDOWN) or event.type == pygame.KEYUP:
 			test.update()
-			for i in ["JUMP", "DUCK", "LEFT", "RIGHT", "SHOOT"]:
+			for i in ["JUMP", "DUCK", "LEFT", "RIGHT", "SHOOT", "MENU"]:
 				test.update()
 				print (test.ispressed(i))
 		if event.type == pygame.QUIT:
@@ -23,10 +23,10 @@ while (1):
 
 	keys = pygame.key.get_pressed()
 
-	if (lastkey != keys[pygame.K_w]):
+	if (lastkey != keys[pygame.K_ESCAPE]):
 		print("W touched!")
 
-	lastkey = keys[pygame.K_w]	
+	lastkey = keys[pygame.K_ESCAPE]	
 	pygame.event.pump()
 	test.update()
 
