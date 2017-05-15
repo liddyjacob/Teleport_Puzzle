@@ -7,14 +7,18 @@ import pygame
 from pygame.locals import *
 
 sys.path.append(os.path.abspath("draw/"))
-from drawutils import Drawutils
-#hi = Drawutils()
 
+#hi = Drawutils()
+sys.path.append(os.path.abspath("players/"))
 sys.path.append(os.path.abspath("map/"))
 sys.path.append(os.path.abspath("inputs/"))
 sys.path.append(os.path.abspath("menu/"))
+sys.path.append(os.path.abspath("objects/"))
+from player import *
+from drawutils import Drawutils
 from menus import *
 from keyboard_mouse import *
+from object_set import *
 sys.path.append(os.path.abspath("gamestates/"))
 from gamestate import *
 

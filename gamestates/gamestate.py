@@ -12,10 +12,13 @@ sys.path.append(os.path.abspath("../map"))
 from gamemap import *
 
 sys.path.append(os.path.abspath("../objects"))
-from objects import *
+from object_set import *
 
 sys.path.append(os.path.abspath("../menu"))
 from menus import *
+
+sys.path.append(os.path.abspath("../draw"))
+from drawutils import *
 
 EXIT = 0
 RETURN = 1
@@ -32,11 +35,23 @@ class Gamestate:
 	def change_state(self):
 		print ("Change State")
 		self.ingame = not self.ingame;
+		if self.ingame:
+			#TODO: CHANGE TO SET_LEVEL
+			#gamemap = Basic_Gamemap()
+			#self.set_level(gamemap)
+			#---PERMANENT ABOVE---
+			#---TEMPORARY BELOW---
+			self.set_test_level()
 
+	def set_test_level(self):		
+		self.gamemap = Basic_Gamemap()
+		self.player = Player()
+		self.objects = Object_Set(self.gamemap)
+	
 	def set_level(self, gamemap):
 		if self.ingame == True:
 			self.gamemap = Gamemap(gamemap)
-			self.player = Player
+			self.player = Player()
 			self.objects = Object_Set(self.gamemap)
 			self.debug = False
 
