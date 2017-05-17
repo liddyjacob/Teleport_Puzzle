@@ -132,6 +132,9 @@ class Gamestate:
 		if self.menuopen:
 			self.menu.draw(drawutils, screen)
 		else:
+			self.player.draw(drawutils, screen)
+			self.objects.draw(drawutils, screen)
+			self.map.draw(drawutils, screen)
 			return
 	
 
