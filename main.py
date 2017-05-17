@@ -28,6 +28,7 @@ def main():
 	pygame.init()
 	screen = pygame.display.set_mode((700, 500))
 	pygame.display.set_caption('Basic Pygame program')
+	background = pygame.Surface(screen.get_size())
 
 	inputs = Keyboard_Mouse()
 	drawutils = Drawutils()
@@ -48,7 +49,7 @@ def main():
 						return
 					if state == "START":
 						print("Start")
-		gamestate.draw(drawutils, screen)
+		gamestate.draw(drawutils, screen, background)
 		#if menu.get_state() == "START"
 #        screen.blit(background, (0, 0))
 		pygame.display.flip()

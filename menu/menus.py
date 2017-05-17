@@ -27,12 +27,13 @@ class MenuItem:
 		#Default h and l
 		self.set_height()
 		self.set_length()
-
+		self.pressed = False
+		self.hover = False
 	 
 	def set_height(self, pixel_height = 20):	
 		self.height = pixel_height
 
-	def set_length(self, pixel_length = 70):
+	def set_length(self, pixel_length = 80):
 		self.length = pixel_length
 
 	#Top left corner
@@ -54,7 +55,7 @@ class MenuItem:
 
 	def update(self, input_):
 		mouse_pos = pygame.mouse.get_pos()
-		print mouse_pos
+		
 		if self.inrange(mouse_pos):
 			if (input_.ispressed("SHOOT")):
 				self.pressed = True
@@ -87,64 +88,70 @@ class MenuItem:
 			return "HOVER"
 		return "NORMAL"
 
-#TODO: This is just a copy of Main_menu(): Fix
-class Ingame_Menu:
-	def __init__(self):
-		self.input = Keyboard_Mouse()
-		self.start = MenuItem("RETURN")
-		self.exit = MenuItem("MAIN_MENU")
+	def ispressed(self):
+		if self.get_state() == "PRESSED":
+			return True
+		return False
 
-		self.start.dynamic_location(0)
-		self.exit.dynamic_location(1)
+	def close(self, screen, background):
+		print 'Closing {}'.format(self.text)
+		screen.blit(background, (self.x, self.y), pygame.Rect(self.x, self.y, self.length, self.height))
+	
 
-
-	def update(self):
-		self.input.update()
-		self.start.update(self.input)
-		self.exit.update(self.input)
-
-	def get_state(self):
-		if self.start.get_state() == "PRESSED":
-			return "START"
-		if self.exit.get_state() == "PRESSED":
-			return "EXIT"
-		#Else
-		return "NORMAL"
-
-
-	def draw(self, drawutils, screen):
-		self.input.update()
-		self.start.draw(drawutils, screen)
-		self.exit.draw(drawutils, screen)	
+class Menu:
+	def __init__(self, item_text,  controls = Keyboard_Mouse(), dynamic = True):
+		self.input = controls
+		#Tuples in form (TEXT, MENUITEM)
+		self.item_list = []
+		self.set_item_text(item_text)
+		self.open = True
 		
+		if dynamic:
+			self.dynamic_item_locations()
 
+	def set_item_text(self, item_text):	
+		for text in item_text:
+			self.item_list.append(MenuItem(text))
 
-class Main_Menu:
-	#Set up a main menu:
-	def __init__(self):
-		self.input = Keyboard_Mouse()
-		self.start = MenuItem("START")
-		self.exit = MenuItem("EXIT")
-
-		self.start.dynamic_location(0)
-		self.exit.dynamic_location(1)
+	def dynamic_item_locations(self):
+		index = 0
+		for item in self.item_list:
+			item.dynamic_location(index)
+			index+=1
+			
 
 	def update(self):
-		self.input.update()
-		self.start.update(self.input)
-		self.exit.update(self.input)
+		self.input.update
+		for item in self.item_list:
+			item.update(self.input)
 
 	def get_state(self):
-		if self.start.get_state() == "PRESSED":
-			return "START"
-		if self.exit.get_state() == "PRESSED":
-			return "EXIT"
-		#Else
+		for item in self.item_list:
+			item.update(self.input)
+			if item.ispressed():
+				return item.text.upper()
 		return "NORMAL"
 
-
 	def draw(self, drawutils, screen):
-		self.input.update()
-		self.start.draw(drawutils, screen)
-		self.exit.draw(drawutils, screen)	
-			
+		if self.open:
+			self.input.update()
+			for item in self.item_list:
+				item.draw(drawutils, screen)			
+		else:
+			print("ERROR: Menu Closed!")
+
+	def close(self, screen, background):
+		self.open = False
+		for item in self.item_list:
+			item.close(screen, background)
+
+#TODO: This is just a copy of Main_menu(): Fix
+class Ingame_Menu(Menu):
+	def __init__(self, control = Keyboard_Mouse()):		
+		Menu.__init__(self,["RETURN", "MAIN MENU"], control)
+
+class Main_Menu(Menu):
+	def __init__(self, control = Keyboard_Mouse()):		
+		Menu.__init__(self,["START", "LOAD" ,"SETTINGS","EXIT"], control)
+
+
