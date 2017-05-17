@@ -6,7 +6,7 @@ class Object:
 	def update(self):
 		print("Object Update")
 
-	def draw(self, drawutils, screen)
+	def draw(self, drawutils, screen):
 		print("Object Draw")
 
 class Physics_Object(Object):
@@ -31,8 +31,8 @@ class Object_Set:
 	def __init__(self, gamemap):
 		self.test = "test"
 
-	def update(self, player, gamemap, beam):
+	def update(self, player, gamemap):
 		return
 
-	def draw(self)
+	def draw(self, drawutils, screen):
 		return	

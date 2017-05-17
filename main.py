@@ -1,3 +1,5 @@
+FPS = 60
+
 #Main.py
 #Python - Main game
 import sys
@@ -30,6 +32,9 @@ def main():
 	pygame.display.set_caption('Basic Pygame program')
 	background = pygame.Surface(screen.get_size())
 
+	fps = FPS
+	fpsClock = pygame.time.Clock()
+
 	inputs = Keyboard_Mouse()
 	drawutils = Drawutils()
 	menu = Main_Menu()
@@ -53,6 +58,7 @@ def main():
 		#if menu.get_state() == "START"
 #        screen.blit(background, (0, 0))
 		pygame.display.flip()
+		fpsClock.tick(fps)
 
 
 if __name__ == '__main__': main()

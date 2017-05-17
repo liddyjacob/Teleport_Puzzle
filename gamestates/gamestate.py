@@ -46,7 +46,7 @@ class Gamestate:
 
 	def set_test_level(self):		
 		self.gamemap = Basic_Gamemap()
-		self.player = Player()
+		self.player = Player(self.gamemap.starting_coords)
 		self.objects = Object_Set(self.gamemap)
 	
 	def set_level(self, gamemap):
@@ -83,7 +83,7 @@ class Gamestate:
 		self._inputs.update()
 		#what to do in the game:
 		if self.ingame:
-			print (self.menuopen)
+			#print (self.menuopen)
 			if self.menuopen == True:
 				self.menu.update()
 				if (self.menu_state() == "MAIN MENU"):
@@ -97,10 +97,7 @@ class Gamestate:
 
 			else:	
 				#Update player:
-				self.player.update(self._inputs, self.gamemap, self.objects)
-				#Update map:
-				self.objects.update(self.player, self.gamemap)
-				#Update drawing	
+				self.player.update_keys(self._inputs)
 			if self._inputs.ispressed("MENU"):
 				self.open_menu()
 
@@ -132,11 +129,17 @@ class Gamestate:
 		if self.menuopen:
 			self.menu.draw(drawutils, screen)
 		else:
-			self.player.draw(drawutils, screen)
-			self.objects.draw(drawutils, screen)
-			self.map.draw(drawutils, screen)
-			return
+			self.react(drawutils, screen, background)
+		return
+
 	
+	#Determine how things should move, then move them.
+	def react(self, drawutils, screen, background):
+		#TODO: Add Reactions.
+		self.player.draw_move(drawutils, screen, background)
+		self.objects.draw(drawutils, screen)
+		self.gamemap.draw(drawutils, screen)
+		return
 
 	def draw_outgame(self, drawutils, screen, background):
 		if self.menu_just_closed:
