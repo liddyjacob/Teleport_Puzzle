@@ -21,9 +21,12 @@ from drawutils import Drawutils
 from menus import *
 from keyboard_mouse import *
 from object_set import *
+from platform import *
+
+from gamemap import *
 sys.path.append(os.path.abspath("gamestates/"))
 from gamestate import *
-
+#Platform()
 
 def main():
 
@@ -36,7 +39,7 @@ def main():
 	fpsClock = pygame.time.Clock()
 
 	inputs = Keyboard_Mouse()
-	drawutils = Drawutils()
+	drawutils = Drawutils(screen)
 	menu = Main_Menu()
 	gamestate = Gamestate(inputs)
 	pygame.display.flip()

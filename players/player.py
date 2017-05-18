@@ -15,7 +15,7 @@ DUCK_HOLD = 2
 MAX_HOLD = 3
 class Player:
 	def __init__(self, coords):
-		self.inair = False
+		self.inair = True
 		self.x = coords[0]
 		self.y = coords[1]
 		self.gravity = -Y_GRAVITY
@@ -23,6 +23,8 @@ class Player:
 		self.jumpspeed = -Y_JUMPSPEED
 		#TODO: ADD
 		self.image = pygame.image.load("res/player.png")
+		self.length = self.image.get_width()
+		self.height = self.image.get_height()
 		#horizontal and vertical velocities
 		self.x_velocity = 0
 		self.y_velocity = 0 #   +
@@ -87,20 +89,27 @@ class Player:
 			if inputs.ispressed("SHOOT"):
 				self.shoot()
 
-	#set inair to true when in air	
-	def draw_move(self, drawutils, screen, background):
-#		self.inair = False
-		
-		screen.blit(background, (self.x, self.y), self.image.get_rect())
+	def move(self):
+		self.old_x = self.x
+		self.old_y = self.y
+
 		self.x += self.x_velocity
 		self.y += self.y_velocity
 	
-		if self.inair:	
+		if self.inair:
 			self.y_velocity += self.gravity
 		#TODO: OTHER gravity things above ^	
 
 
+
+	#set inair to true when in air	
+	def draw(self, drawutils, screen, background):
+#		self.inair = False		
+		screen.blit(background, (self.old_x, self.old_y), self.image.get_rect())
 		screen.blit(self.image, (self.x, self.y))
 		return
 
+	def close(self, screen, background):
+		print "Closing Player"
+		screen.blit(background, (self.x, self.y), self.image.get_rect())
 

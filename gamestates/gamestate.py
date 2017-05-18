@@ -10,6 +10,8 @@ from player import *
 
 sys.path.append(os.path.abspath("../map"))
 from gamemap import *
+from platform import *
+GameMap()
 
 sys.path.append(os.path.abspath("../objects"))
 from object_set import *
@@ -24,6 +26,12 @@ EXIT = 0
 RETURN = 1
 KEEPOPEN = 3
 
+def React_Phys(player, objects, gamemap):
+	player.move()
+	gamemap.hitbox(player)
+	#objects.hitbox(player)
+	#beams.move(player, gamemap, object)
+
 class Gamestate:
 	def __init__(self, inputs):
 		self._inputs = inputs;
@@ -31,6 +39,7 @@ class Gamestate:
 		self.menuopen = True
 		self.open_menu()
 		self.menu_just_closed = False
+		self.just_left_game = False
 
 	def change_state(self):
 		print ("Change State")
@@ -88,6 +97,7 @@ class Gamestate:
 				self.menu.update()
 				if (self.menu_state() == "MAIN MENU"):
 					self.change_state()
+					self.just_left_game = True
 					self.menuopen = True
 					self.menu_just_closed = True
 				elif (self.menu_state() == "RETURN"):
@@ -130,18 +140,26 @@ class Gamestate:
 			self.menu.draw(drawutils, screen)
 		else:
 			self.react(drawutils, screen, background)
+			
 		return
 
 	
 	#Determine how things should move, then move them.
 	def react(self, drawutils, screen, background):
 		#TODO: Add Reactions.
-		self.player.draw_move(drawutils, screen, background)
+		React_Phys(self.player, self.objects, self.gamemap)	
+
+		self.player.draw(drawutils, screen, background)
 		self.objects.draw(drawutils, screen)
 		self.gamemap.draw(drawutils, screen)
 		return
 
 	def draw_outgame(self, drawutils, screen, background):
+		if (self.just_left_game == True):
+			self.just_left_game = False
+			self.player.close(screen, background)
+			self.gamemap.close(drawutils, screen, background)
+	
 		if self.menu_just_closed:
 			self.close_menu(screen, background)
 			self.open_menu()
